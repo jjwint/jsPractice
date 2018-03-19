@@ -1,36 +1,64 @@
+var userObj = {
+	name: null,
+	health: 40,
+	healsRemaining: 2,
+	wins: 0
+};
+userObj.generateAttackDamage = function() {
+	return damage = Math.floor((Math.random() * 3) + 1);
+};
+userObj.heal = function() {
+	userObj.healsRemaining -= 1;
+	return healAmount = Math.floor((Math.random() * 10) + 1);
+};
+
+var grantObj = {
+	name: "Grant the Almighty",
+	health: 10
+};
+
+grantObj.generateAttackDamage = function() {
+	return damage = Math.floor((Math.random() * 5) + 1);
+};
+
 var inviteUser = null;
-var userName = null;
-var userWins = 0;
-var userHealth = 40;
-var grantHealth = 10;
 
 function startGame() {
 	inviteUser = prompt("Would you like to play a game with two characters?");
 	if (inviteUser.toLowerCase() === "yes") {
-		userName = prompt("What would you like to name your character?");
+		userObj.name = prompt("What would you like to name your character?");
+		console.log(userObj.name);
 		startCombat();
 	}
 }
 
 function startCombat() {
-	while (userHealth > 0 && userWins < 3) {
-		var takeTurn = prompt("Would you like to attack or quit?");
+	while ((userObj.health) > 0 && userObj.wins < 5) {
+		var takeTurn = prompt("Would you like to attack, heal, or quit?");
 		if (takeTurn.toLowerCase() === "attack") {
-			grantHealth -= getDamage();
-			userHealth -= getDamage();
-			console.log(userName + " has " + userHealth + " health left.");
-			console.log("Grant the almighty has " + grantHealth + " health left.");
-			if (grantHealth <= 0) {
-				userWins += 1;
-				grantHealth = 10;
+			grantObj.health -= userObj.generateAttackDamage();
+			userObj.health -= grantObj.generateAttackDamage();
+			console.log(userObj.name + " has " + userObj.health + " health left.");
+			console.log("Grant the almighty has " + grantObj.health + " health left.");
+			if (grantObj.health <= 0) {
+				userObj.wins += 1;
+				grantObj.health = 10;
 				// console.log("grant's health reset to " + grantHealth);
-				console.log(userName + " has " + userWins + " wins! You need " + (3 - userWins) + " more wins!");
+				console.log(userObj.name + " has " + userObj.wins + " wins! You need " + (3 - userObj.wins) + " more wins!");
 			}
-			if (userHealth <= 0) {
+			if (userObj.health <= 0) {
 				console.log("Grant is the winner!");
 			}
-			if (userWins >= 3) {
-				console.log(userName + " is the winner!");
+			if (userObj.wins >= 5) {
+				console.log(userObj.name + " is the winner!");
+			}
+		} else if (takeTurn.toLowerCase() === "heal") {
+			if (userObj.healsRemaining > 0) {
+				userObj.health += userObj.heal();
+				console.log("heals remaining: " + userObj.healsRemaining);
+				console.log("user health: " + userObj.health);
+				// console.log(userObj.name + " was healed "  + " health points.");
+				// console.log(userObj.name + " has " +  + " heals remaining.");
 			}
 		} else if (takeTurn.toLowerCase() === "quit") {
 			return;
@@ -38,8 +66,6 @@ function startCombat() {
 	}
 }
 
-function getDamage() {
-	return damage = Math.floor((Math.random() * 2) + 1);
-}
-
 startGame();
+
+
